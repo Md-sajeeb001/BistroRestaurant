@@ -4,17 +4,18 @@ const ChefService = () => {
   return (
     <div className="pb-10">
       <div
-        className="pt-9"
+        className="pt-20 bg-fixed"
         style={{
           backgroundImage: `url(${chefservice})`,
           width: "100%",
-          height: "300px",
+          height: "400px",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         {" "}
-        <div className="max-w-3xl mx-auto space-y-3 border bg-white  text-black text-center p-12">
+        <div className="max-w-3xl mx-auto space-y-3 bg-black bg-opacity-30 text-white text-center p-12">
           <h2 className="text-4xl font-light">Bistro Boss</h2>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit.

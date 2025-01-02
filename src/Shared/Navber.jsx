@@ -1,12 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import UseAuth from "../Hooks/UseAuth";
 
 const Navber = () => {
+  const { user, signOutUser } = UseAuth();
+  // sign out user!
+  const handelSignOutUser = () => {
+    signOutUser().then((res) => {
+      console.log(res);
+    });
+  };
   const navLinks = (
     <>
-      <button className="btn btn-info">Info</button>
-      <button className="btn btn-success">Success</button>
-      <button className="btn btn-warning">Warning</button>
-      <button className="btn btn-error">Error</button>
+      <li>
+        <NavLink to="/">HOME</NavLink>
+      </li>
+      <li>
+        <NavLink to="/contact">CONTACT US</NavLink>
+      </li>
+      <li>
+        <NavLink to="/dashboard">DASHBOARD</NavLink>
+      </li>
+      <li>
+        <NavLink to="/menu">OUR MENU</NavLink>
+      </li>
+      <li>
+        <NavLink to="/order">ORDERS</NavLink>
+      </li>
+      <li>
+        <NavLink to="/secret">SECRET</NavLink>
+      </li>
     </>
   );
 
@@ -47,7 +69,11 @@ const Navber = () => {
           <ul className="menu menu-horizontal px-1">{navLinks}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          {user ? (
+            <Link className="btn" onClick={handelSignOutUser}>LOG OUT</Link>
+          ) : (
+            <NavLink className="btn" to="/login">LOGIN</NavLink>
+          )}
         </div>
       </div>
     </>
