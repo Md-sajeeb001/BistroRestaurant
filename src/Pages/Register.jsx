@@ -163,6 +163,11 @@ const Register = () => {
                 className="input input-bordered"
                 // required
               />
+              {errors.password && (
+                <span className="text-xs text-rose-500">
+                  password is required
+                </span>
+              )}
               {errors.password?.type === "minLength" && (
                 <span className="text-xs text-rose-500">
                   password must be 6 characters

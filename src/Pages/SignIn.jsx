@@ -14,10 +14,11 @@ import toast from "react-hot-toast";
 const SignIn = () => {
   // const { signInUser, singWithGoogle } = UseAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [disabled, setDisabled] = useState(true);
   const { signInUser } = UseAuth();
+  const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  console.log('state from the location', location.state)
 
   useEffect(() => {
     loadCaptchaEnginge(6);

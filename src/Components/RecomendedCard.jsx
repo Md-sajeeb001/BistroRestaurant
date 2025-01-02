@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 const RecomendedCard = ({ card }) => {
-  console.log(card);
   const { recipe, category, image } = card;
   return (
     <div className="card rounded-none bg-base-100 shadow-xl">

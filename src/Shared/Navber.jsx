@@ -1,8 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import UseAuth from "../Hooks/UseAuth";
+import { FaCartShopping } from "react-icons/fa6";
+import UseCart from "../Hooks/UseCart";
 
 const Navber = () => {
   const { user, signOutUser } = UseAuth();
+  const [cart] = UseCart();
   // sign out user!
   const handelSignOutUser = () => {
     signOutUser().then((res) => {
@@ -24,7 +27,7 @@ const Navber = () => {
         <NavLink to="/menu">OUR MENU</NavLink>
       </li>
       <li>
-        <NavLink to="/order">ORDERS</NavLink>
+        <NavLink to="/order/salad">ORDERS FOOD</NavLink>
       </li>
       <li>
         <NavLink to="/secret">SECRET</NavLink>
@@ -68,11 +71,23 @@ const Navber = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navLinks}</ul>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end gap-3">
+          <div>
+            <NavLink to="/">
+              <button className="btn">
+                <FaCartShopping></FaCartShopping>
+                <div className="badge badge-secondary">+{cart.length}</div>
+              </button>
+            </NavLink>
+          </div>
           {user ? (
-            <Link className="btn" onClick={handelSignOutUser}>LOG OUT</Link>
+            <Link className="btn" onClick={handelSignOutUser}>
+              LOG OUT
+            </Link>
           ) : (
-            <NavLink className="btn" to="/login">LOGIN</NavLink>
+            <NavLink className="btn" to="/login">
+              LOGIN
+            </NavLink>
           )}
         </div>
       </div>

@@ -6,12 +6,14 @@ import "react-tabs/style/react-tabs.css";
 import UseMenu from "../Hooks/UseMenu";
 import OrderTab from "../Components/OrderTab";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const Orders = () => {
   const categories = ["salad", "pizza", "soup", "dessert", "drinks"];
   const { category } = useParams();
+  const initialIndex = categories?.indexOf(category);
+  const [tabIndex, setTabIndex] = useState(initialIndex);
   const [menu] = UseMenu();
-  const [tabIndex, setTabIndex] = useState(0);
 
   const drinks = menu?.filter((item) => item?.category === "drinks");
   const desserts = menu?.filter((item) => item?.category === "dessert");
@@ -19,10 +21,6 @@ const Orders = () => {
   const soup = menu?.filter((item) => item?.category === "soup");
   const salad = menu?.filter((item) => item?.category === "salad");
 
-  useEffect(() => {
-    const categoryIndex = categories.indexOf(category.toLowerCase());
-    setTabIndex(categoryIndex);
-  }, [categories, category]);
   return (
     <div>
       <Helmet>
