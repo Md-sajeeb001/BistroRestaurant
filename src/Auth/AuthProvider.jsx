@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -11,15 +12,13 @@ import { createContext, useEffect, useState } from "react";
 import { app } from "../firebase/firebaseInit";
 import { getAuth } from "firebase/auth";
 
-import { GoogleAuthProvider } from "firebase/auth";
-import axios from "axios";
-
 export const AuthContext = createContext();
-const auth = getAuth(app);
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
+  const auth = getAuth(app);
 
   //   crate user with email and password
   const createUser = (email, password) => {
@@ -56,7 +55,9 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log('user create')
       setUser(currentUser);
+      setLoading(false)
     });
     return () => {
       unSubscribe();

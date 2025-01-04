@@ -73,10 +73,10 @@ const Navber = () => {
         </div>
         <div className="navbar-end gap-3">
           <div>
-            <NavLink to="/">
+            <NavLink to="/dashboard/cart">
               <button className="btn">
                 <FaCartShopping></FaCartShopping>
-                <div className="badge badge-secondary">+{cart.length}</div>
+                <div className="badge badge-secondary">+{cart?.length}</div>
               </button>
             </NavLink>
           </div>

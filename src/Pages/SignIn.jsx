@@ -5,20 +5,19 @@ import {
   LoadCanvasTemplate,
   validateCaptcha,
 } from "react-simple-captcha";
-import UseAuth from "../Hooks/UseAuth";
 import { Helmet } from "react-helmet-async";
-// import { FcGoogle } from "react-icons/fc";
-// import UseAuth from "../../Hooks/UseAuth";
+import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
+import UseAuth from "../Hooks/UseAuth";
+import UseAxiosPublic from "../Hooks/UseAxiosPublic";
 
 const SignIn = () => {
-  // const { signInUser, singWithGoogle } = UseAuth();
+  const { signInUser, singWithGoogle } = UseAuth();
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
-  const { signInUser } = UseAuth();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  console.log('state from the location', location.state)
+  const axiosPublic = UseAxiosPublic()
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -56,13 +55,23 @@ const SignIn = () => {
       });
   };
 
-  // // google sign up!
-  // const handelGoolgeSubmit = () => {
-  //   singWithGoogle().then((resutl) => {
-  //     console.log(resutl);
-  //     navigate("/");
-  //   });
-  // };
+  // google sign up!
+  const handelGoolgeSubmit = () => {
+    singWithGoogle()
+    .then((result) => {
+      console.log(result);
+
+      const userInfo = {
+        name: result.user?.email,
+        email: result.user?.displayName,
+      };
+
+      axiosPublic.post("/users", userInfo).then((res) => {
+        console.log(res.data);
+        navigate("/");
+      });
+    });
+  };
 
   return (
     <div>
@@ -73,12 +82,12 @@ const SignIn = () => {
         <h2 className="text-center font-bold text-5xl pt-4">Sign In Now!</h2>
         <div className="divider px-6">or</div>
         <div className="form-control px-6 mt-6">
-          {/* <button
-          onClick={handelGoolgeSubmit}
-          className="btn bg-white border hover:bg-white"
-        >
-          <FcGoogle className="text-2xl"></FcGoogle> Sign In With Google
-        </button> */}
+          <button
+            onClick={handelGoolgeSubmit}
+            className="btn bg-white border hover:bg-white"
+          >
+            <FcGoogle className="text-2xl"></FcGoogle> Sign In With Google
+          </button>
         </div>
         <form onSubmit={handelSubmit} className="card-body">
           <div className="form-control">

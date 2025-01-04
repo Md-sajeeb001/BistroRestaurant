@@ -7,6 +7,9 @@ import SignIn from "../Pages/SignIn";
 import Register from "../Pages/Register";
 import Secret from "../Pages/Secret";
 import PrivetRoute from "../Privet/PrivetRoute";
+import Dashboard from "../LayOut/Dashboard";
+import Cart from "../Pages/Dashboard/Cart/Cart";
+import AllUsers from "../Pages/Dashboard/AllUsers";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +43,25 @@ const router = createBrowserRouter([
             <Secret></Secret>
           </PrivetRoute>
         ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivetRoute>
+        <Dashboard></Dashboard>
+      </PrivetRoute>
+    ),
+    children: [
+      {
+        path: "cart",
+        element: <Cart></Cart>,
+      },
+      // all users
+      {
+        path: "allUsers",
+        element: <AllUsers></AllUsers>,
       },
     ],
   },

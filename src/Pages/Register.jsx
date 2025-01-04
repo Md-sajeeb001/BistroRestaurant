@@ -1,15 +1,16 @@
-// import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import UseAuth from "../Hooks/UseAuth";
-import toast, { Toaster } from "react-hot-toast";
-// import resturant from "../Animation/resturant.json";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import UseAxiosPublic from "../Hooks/UseAxiosPublic";
 
 const Register = () => {
   const { createUser, updateUserProfile, singWithGoogle } = UseAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const axiosPublic = UseAxiosPublic();
 
   const {
     register,
@@ -18,79 +19,44 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
     createUser(data.email, data.password).then((res) => {
-      console.log(res.user);
-      updateUserProfile(data.name, data.photoURL);
-      toast.success("user resigter successful.");
-      navigate(from, { replace: true })
-        .then((res) => {
-          console.log(res);
-          reset();
-        })
-        .catch((err) => console.log(err.message));
+      updateUserProfile(data.name, data.photoURL).then((res) => {
+        // create user in the database!
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        };
+
+        axiosPublic.post("users", userInfo).then((res) => {
+          if (res.data) {
+            reset();
+            toast.success("user resigter successful.");
+          }
+        });
+      });
+      navigate(from, { replace: true }).catch((err) =>
+        console.log(err.message)
+      );
     });
   };
 
-  // const navigate = useNavigate();
-  // sign in with email and password
-  // const handelSubmit = (e) => {
-  //   e.preventDefault();
-  //   const form = e.target;
-  //   const name = form.name.value;
-  //   const email = form.email.value;
-  //   const password = form.password.value;
-  //   const photo = form.photo.value;
-
-  //   // password validation
-  //   const passwordValidation = /^.{0,5}$/;
-  //   if (passwordValidation.test(password)) {
-  //     return toast.error(
-  //       "Password should be at least 6 characters Week Password"
-  //     );
-  //   }
-
-  //   //don't have a capital letter
-  //   const CapitalLetter = /^[^A-Z]*$/;
-  //   if (CapitalLetter.test(password)) {
-  //     return toast.error(`Dont't Have Capital Letter In Your Password`);
-  //   }
-
-  //   //  don't have a special character
-  //   const specialCharc = /^[a-zA-Z0-9 ]*$/;
-  //   if (specialCharc.test(password)) {
-  //     return toast.error(`Don't Have A Special Character In Your PassWord`);
-  //   }
-
-  //   // don't have a numeric character
-  //   const numericCharc = /^[^0-9]*$/;
-  //   if (numericCharc.test(password)) {
-  //     return toast.error(`Don't Have A Numeric Character In Your Password`);
-  //   }
-
-  //   createUser(email, password)
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res) {
-  //         toast.success("SignUp Successfully!");
-  //       }
-
-  //       // update user info!
-  //       updateUserProfile({ displayName: name, photoURL: photo });
-
-  //       // navigate to root route
-  //       navigate("/");
-  //     })
-  //     .catch((err) => {
-  //       toast.error(err.message);
-  //     });
-  // };
-
   // google sign up!
   const handelGoolgeSubmit = () => {
-    singWithGoogle().then((resutl) => {
-      console.log(resutl);
+    singWithGoogle().then((result) => {
+      console.log("user signin with google", result);
+
+      const userInfo = {
+        name: result.user?.email,
+        email: result.user?.displayName,
+      };
+
+      axiosPublic.post("/users", userInfo).then((res) => {
+        console.log(res.data);
+        navigate("/");
+      });
+
       toast.success("Sign In Successfull!");
       navigate(from, { replace: true });
     });
@@ -104,8 +70,7 @@ const Register = () => {
           onClick={handelGoolgeSubmit}
           className="btn bg-white border hover:bg-white"
         >
-          {/* <FcGoogle className="text-2xl"></FcGoogle> Sign Up With Google */}
-          Google
+          <FcGoogle className="text-2xl"></FcGoogle> Sign Up With Google Google
         </button>
       </div>
       <div className="divider px-8">or</div>
